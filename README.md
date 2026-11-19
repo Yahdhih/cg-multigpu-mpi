@@ -26,7 +26,7 @@ Les tableaux complets sont dans [`results/summary.md`](results/summary.md).
 - **Découpage en tranches de plans z.** Avec la numérotation k-majeure, un plan est contigu en mémoire : le halo vers chaque voisin est un seul bloc de `m²` doubles, envoyé sans empaquetage.
 - **Assemblage local.** Chaque rang assemble seulement sa tranche de la matrice CSR. Les colonnes qui pointent vers un voisin sont renumérotées vers deux plans « fantômes », stockés à la fin du vecteur `p` (le seul vecteur que la SpMV lit avec des voisins).
 - **Un GPU par rang**, choisi par le rang local au nœud (`MPI_Comm_split_type`), et chaque rang est placé sur le CPU Grace de son GPU (`--bind-to numa`).
-- **Noyaux fusionnés** (mise à jour de x et r avec produit scalaire, Jacobi avec produit scalaire), repris du projet [cg-openmp-vs-cuda](../cg-openmp-vs-cuda).
+- **Noyaux fusionnés** (mise à jour de x et r avec produit scalaire, Jacobi avec produit scalaire), repris du projet [cg-openmp-vs-cuda-gh200](https://github.com/Yahdhih/cg-openmp-vs-cuda-gh200).
 
 | Fichier | Rôle |
 |---|---|
@@ -47,6 +47,6 @@ python analysis/analyse.py results/scaling_N*.csv
 
 ## Limites
 
-- Préconditionneur Jacobi : le nombre d'itérations croît avec la taille. Le [projet multigrille](../mg-pcg-gpu) traite ce point sur un seul GPU.
+- Préconditionneur Jacobi : le nombre d'itérations croît avec la taille. Le [projet multigrille](https://github.com/Yahdhih/multigrid-pcg-cuda) traite ce point sur un seul GPU.
 - Découpage 1D en z seulement : au-delà de quelques dizaines de GPU, la surface d'échange ne diminue plus avec le nombre de rangs, et un découpage 2D ou 3D deviendrait nécessaire.
 - Scalabilité faible mesurée sur 1000 itérations fixes, puisque le nombre d'itérations dépend de la taille du domaine. La métrique est le temps par itération.
